@@ -1,0 +1,2039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shivansh Kumar | Cyber Security Expert & Founder of Cyber World</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --neon-blue: #00d4ff;
+    --neon-cyan: #00fff7;
+    --neon-purple: #b000ff;
+    --neon-green: #00ff41;
+    --neon-pink: #ff006e;
+    --dark-bg: #020408;
+    --dark-navy: #040d1a;
+    --dark-card: rgba(4, 15, 35, 0.8);
+    --glass: rgba(0, 212, 255, 0.05);
+    --glass-border: rgba(0, 212, 255, 0.2);
+    --text-primary: #e8f4ff;
+    --text-secondary: #8ab4cc;
+    --font-orb: 'Orbitron', monospace;
+    --font-raj: 'Rajdhani', sans-serif;
+    --font-pop: 'Poppins', sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark-bg);
+    color: var(--text-primary);
+    font-family: var(--font-pop);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ─── CUSTOM CURSOR ─── */
+  .cursor-dot {
+    width: 8px; height: 8px;
+    background: var(--neon-cyan);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 99999;
+    transition: transform 0.1s;
+    box-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--neon-blue);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 99998;
+    transition: transform 0.15s ease, width 0.2s, height 0.2s, border-color 0.2s;
+  }
+  .cursor-ring.hover { width: 60px; height: 60px; border-color: var(--neon-purple); }
+
+  /* ─── LOADING SCREEN ─── */
+  #loader {
+    position: fixed;
+    inset: 0;
+    background: var(--dark-bg);
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.7s ease, visibility 0.7s;
+  }
+  #loader.hidden { opacity: 0; visibility: hidden; }
+  .loader-logo {
+    font-family: var(--font-orb);
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 900;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-blue);
+    letter-spacing: 0.3em;
+    animation: glitchText 0.5s infinite;
+    margin-bottom: 2rem;
+  }
+  .loader-bar-wrap {
+    width: 280px; height: 3px;
+    background: rgba(0,212,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(0,212,255,0.2);
+  }
+  .loader-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon-blue), var(--neon-cyan));
+    box-shadow: 0 0 12px var(--neon-cyan);
+    animation: loadBar 2.2s ease forwards;
+    width: 0;
+  }
+  .loader-pct {
+    font-family: var(--font-mono);
+    color: var(--neon-cyan);
+    font-size: 0.85rem;
+    margin-top: 0.75rem;
+    letter-spacing: 0.2em;
+  }
+  .loader-text {
+    font-family: var(--font-mono);
+    color: var(--neon-green);
+    font-size: 0.75rem;
+    margin-top: 1rem;
+    letter-spacing: 0.1em;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes loadBar { to { width: 100%; } }
+  @keyframes blink { 50% { opacity: 0; } }
+  @keyframes glitchText {
+    0%, 100% { clip-path: none; transform: none; }
+    10% { clip-path: inset(20% 0 30% 0); transform: translate(-2px, 0); }
+    20% { clip-path: none; transform: none; }
+    40% { clip-path: inset(60% 0 10% 0); transform: translate(2px, 0); }
+    50% { clip-path: none; transform: none; }
+  }
+
+  /* ─── MATRIX CANVAS ─── */
+  #matrix-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.07;
+    pointer-events: none;
+  }
+
+  /* ─── PARTICLES ─── */
+  #particles-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9000;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(2, 4, 8, 0.7);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    transition: all 0.3s;
+  }
+  nav.scrolled { padding: 0.6rem 2rem; box-shadow: 0 4px 30px rgba(0, 212, 255, 0.1); }
+  .nav-logo {
+    font-family: var(--font-orb);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--neon-cyan);
+    text-decoration: none;
+    text-shadow: 0 0 15px var(--neon-cyan);
+    letter-spacing: 0.15em;
+  }
+  .nav-logo span { color: var(--neon-purple); }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    align-items: center;
+  }
+  .nav-links a {
+    font-family: var(--font-raj);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--neon-cyan);
+    box-shadow: 0 0 8px var(--neon-cyan);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--neon-cyan); }
+  .nav-links a:hover::after { width: 100%; }
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .hamburger span {
+    width: 24px; height: 2px;
+    background: var(--neon-cyan);
+    border-radius: 2px;
+    transition: all 0.3s;
+    box-shadow: 0 0 6px var(--neon-cyan);
+  }
+
+  /* ─── SECTIONS BASE ─── */
+  section { position: relative; z-index: 2; padding: 6rem 2rem; overflow: hidden; }
+  .section-title {
+    font-family: var(--font-orb);
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+  .section-title span { color: var(--neon-cyan); text-shadow: 0 0 20px var(--neon-cyan); }
+  .section-subtitle {
+    text-align: center;
+    color: var(--text-secondary);
+    font-family: var(--font-raj);
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 3.5rem;
+  }
+  .section-line {
+    width: 80px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+    margin: 0.5rem auto 0.5rem;
+    box-shadow: 0 0 8px var(--neon-cyan);
+  }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    position: relative;
+  }
+  .hero-bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: 0;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 680px;
+    padding-top: 5rem;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--neon-green);
+    border: 1px solid rgba(0,255,65,0.3);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.1em;
+    animation: fadeInDown 0.8s ease both;
+    background: rgba(0,255,65,0.05);
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--neon-green);
+    border-radius: 50%;
+    animation: pulse 1.5s ease infinite;
+    box-shadow: 0 0 8px var(--neon-green);
+  }
+  .hero-name {
+    font-family: var(--font-orb);
+    font-size: clamp(2rem, 5.5vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 0.8rem;
+    background: linear-gradient(135deg, #fff 0%, var(--neon-cyan) 50%, var(--neon-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeInUp 0.8s 0.2s ease both;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .hero-typed-wrap {
+    font-family: var(--font-raj);
+    font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+    font-weight: 600;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 15px var(--neon-cyan);
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.1em;
+    animation: fadeInUp 0.8s 0.4s ease both;
+    min-height: 2.2rem;
+  }
+  .typed-cursor {
+    display: inline-block;
+    width: 2px;
+    background: var(--neon-cyan);
+    margin-left: 2px;
+    animation: blink 0.8s step-end infinite;
+    box-shadow: 0 0 8px var(--neon-cyan);
+    height: 1.2em;
+    vertical-align: middle;
+  }
+  .hero-desc {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    max-width: 520px;
+    animation: fadeInUp 0.8s 0.6s ease both;
+  }
+  .hero-btns {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    animation: fadeInUp 0.8s 0.8s ease both;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    font-family: var(--font-raj);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    color: #fff;
+    box-shadow: 0 0 20px rgba(0,100,255,0.4), inset 0 0 20px rgba(255,255,255,0.05);
+  }
+  .btn-primary:hover {
+    box-shadow: 0 0 40px rgba(0,212,255,0.6), 0 0 80px rgba(176,0,255,0.3);
+    transform: translateY(-2px);
+  }
+  .btn-outline {
+    font-family: var(--font-raj);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.85rem 2rem;
+    background: transparent;
+    border: 1.5px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+    box-shadow: 0 0 15px rgba(0,212,255,0.2);
+  }
+  .btn-outline:hover {
+    background: rgba(0,212,255,0.1);
+    box-shadow: 0 0 30px rgba(0,212,255,0.5);
+    transform: translateY(-2px);
+    color: #fff;
+  }
+  .hero-socials {
+    display: flex;
+    gap: 1rem;
+    animation: fadeInUp 0.8s 1s ease both;
+  }
+  .social-icon {
+    width: 42px; height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.3s;
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+  }
+  .social-icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .social-icon:hover { border-color: var(--neon-cyan); color: #fff; transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,212,255,0.3); }
+  .social-icon:hover::before { opacity: 0.15; }
+  .social-icon i { position: relative; z-index: 1; }
+
+  /* hero right - terminal */
+  .hero-visual {
+    position: absolute;
+    right: 4%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: min(420px, 42vw);
+    z-index: 2;
+    animation: fadeInRight 1s 0.5s ease both;
+  }
+  .terminal-window {
+    background: rgba(2, 8, 20, 0.9);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,212,255,0.15), 0 30px 60px rgba(0,0,0,0.5);
+    backdrop-filter: blur(20px);
+  }
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.75rem 1rem;
+    background: rgba(0,212,255,0.06);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .t-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .t-dot.red { background: #ff5f57; }
+  .t-dot.yellow { background: #febc2e; }
+  .t-dot.green { background: #28c840; }
+  .terminal-title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin-left: auto;
+    margin-right: auto;
+    letter-spacing: 0.1em;
+  }
+  .terminal-body {
+    padding: 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.9;
+    min-height: 220px;
+  }
+  .t-line { display: block; }
+  .t-prompt { color: var(--neon-green); }
+  .t-cmd { color: var(--neon-cyan); }
+  .t-output { color: #8ab4cc; padding-left: 1em; }
+  .t-highlight { color: var(--neon-purple); }
+  .t-success { color: var(--neon-green); }
+  .t-error { color: #ff4d6a; }
+  .terminal-cursor {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--neon-green);
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+    box-shadow: 0 0 8px var(--neon-green);
+  }
+
+  /* cyber shield animation */
+  .cyber-shield {
+    position: absolute;
+    bottom: -40px;
+    right: -40px;
+    width: 160px; height: 160px;
+    z-index: 1;
+    animation: rotate3d 8s linear infinite;
+    opacity: 0.3;
+  }
+
+  /* ─── ABOUT ─── */
+  #about { background: linear-gradient(180deg, var(--dark-bg) 0%, var(--dark-navy) 100%); }
+  .about-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  .about-avatar-wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .about-avatar {
+    width: 260px; height: 260px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(176,0,255,0.1));
+    border: 2px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,212,255,0.15), 0 0 80px rgba(176,0,255,0.1);
+    animation: float 4s ease-in-out infinite;
+  }
+  .about-avatar-inner {
+    font-size: 7rem;
+    line-height: 1;
+    filter: drop-shadow(0 0 20px var(--neon-cyan));
+  }
+  .avatar-ring {
+    position: absolute;
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 50%;
+    animation: rotateSlow 6s linear infinite;
+  }
+  .avatar-ring:nth-child(1) { width: 310px; height: 310px; border-color: rgba(0,212,255,0.15); }
+  .avatar-ring:nth-child(2) { width: 360px; height: 360px; border-color: rgba(176,0,255,0.1); animation-direction: reverse; animation-duration: 9s; }
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .stat-card {
+    background: var(--dark-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+  }
+  .stat-card:hover { border-color: var(--neon-cyan); transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,212,255,0.15); }
+  .stat-number {
+    font-family: var(--font-orb);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 15px var(--neon-cyan);
+    display: block;
+  }
+  .stat-label {
+    font-family: var(--font-raj);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .about-text h3 {
+    font-family: var(--font-orb);
+    font-size: 1.2rem;
+    color: var(--neon-cyan);
+    margin-bottom: 1rem;
+    letter-spacing: 0.1em;
+  }
+  .about-text p {
+    color: var(--text-secondary);
+    line-height: 1.9;
+    font-size: 0.95rem;
+    margin-bottom: 1.2rem;
+  }
+  .about-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
+  }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 4px;
+    color: var(--neon-cyan);
+    background: rgba(0,212,255,0.05);
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── SKILLS ─── */
+  #skills { background: var(--dark-bg); }
+  .skills-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.25rem;
+  }
+  .skill-card {
+    background: var(--dark-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    cursor: default;
+  }
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+    opacity: 0;
+    transition: opacity 0.4s;
+    z-index: 0;
+  }
+  .skill-card:hover { border-color: var(--neon-cyan); transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(0,212,255,0.2); }
+  .skill-card:hover::before { opacity: 0.06; }
+  .skill-card * { position: relative; z-index: 1; }
+  .skill-icon {
+    font-size: 2.2rem;
+    margin-bottom: 0.75rem;
+    display: block;
+    transition: transform 0.3s;
+    filter: drop-shadow(0 0 8px var(--neon-cyan));
+  }
+  .skill-card:hover .skill-icon { transform: scale(1.2) rotate(5deg); }
+  .skill-name {
+    font-family: var(--font-raj);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+  }
+  .skill-bar-wrap {
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+    height: 4px;
+    overflow: hidden;
+    margin-bottom: 0.4rem;
+  }
+  .skill-bar {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--neon-blue), var(--neon-cyan));
+    box-shadow: 0 0 10px var(--neon-cyan);
+    width: 0;
+    transition: width 1.5s cubic-bezier(0.2, 1, 0.3, 1);
+  }
+  .skill-pct {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--neon-cyan);
+    text-align: right;
+    display: block;
+  }
+
+  /* ─── CYBER SECURITY ─── */
+  #cybersec { background: linear-gradient(180deg, var(--dark-bg) 0%, rgba(4, 0, 20, 0.98) 100%); }
+  .cybersec-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .cybersec-card {
+    background: var(--dark-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+  }
+  .cybersec-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(transparent, transparent, transparent, var(--neon-cyan));
+    animation: rotateSlow 4s linear infinite;
+    opacity: 0;
+    transition: opacity 0.4s;
+    z-index: 0;
+  }
+  .cybersec-card::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: rgba(4, 15, 35, 0.95);
+    border-radius: 10px;
+    z-index: 1;
+  }
+  .cybersec-card:hover::after { opacity: 0.4; }
+  .cybersec-card:hover { box-shadow: 0 20px 40px rgba(0,212,255,0.15); transform: translateY(-6px); }
+  .cybersec-card > * { position: relative; z-index: 2; }
+  .cybersec-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+    width: 56px; height: 56px;
+    line-height: 56px;
+    text-align: center;
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 10px;
+    background: rgba(0,212,255,0.05);
+    color: var(--neon-cyan);
+    text-shadow: 0 0 15px var(--neon-cyan);
+  }
+  .cybersec-card h3 {
+    font-family: var(--font-raj);
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    margin-bottom: 0.6rem;
+  }
+  .cybersec-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.8; }
+
+  /* ─── PROJECTS ─── */
+  #projects { background: var(--dark-bg); }
+  .projects-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+  .project-card {
+    background: var(--dark-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: all 0.4s;
+    backdrop-filter: blur(10px);
+    position: relative;
+  }
+  .project-card:hover { border-color: var(--neon-cyan); transform: translateY(-8px); box-shadow: 0 24px 48px rgba(0,212,255,0.2); }
+  .project-preview {
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .project-preview-bg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    transition: transform 0.4s;
+  }
+  .project-card:hover .project-preview-bg { transform: scale(1.1); }
+  .project-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 4, 8, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .project-card:hover .project-overlay { opacity: 1; }
+  .proj-link {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-family: var(--font-raj);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .proj-link.demo { background: var(--neon-cyan); color: #000; }
+  .proj-link.github { background: transparent; border: 1px solid #fff; color: #fff; }
+  .proj-link:hover { transform: scale(1.05); }
+  .project-body { padding: 1.25rem; }
+  .project-num {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--neon-cyan);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+  }
+  .project-name {
+    font-family: var(--font-raj);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+  .project-desc { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 0.8rem; }
+  .project-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .stack-tag {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    border: 1px solid rgba(176,0,255,0.4);
+    color: rgba(176,0,255,0.9);
+    background: rgba(176,0,255,0.05);
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── GALLERY ─── */
+  #gallery { background: linear-gradient(180deg, var(--dark-bg) 0%, var(--dark-navy) 100%); }
+  .gallery-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+  .gallery-item {
+    aspect-ratio: 4/3;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--glass-border);
+    cursor: pointer;
+    transition: all 0.3s;
+    background: var(--dark-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .gallery-item:hover { border-color: var(--neon-cyan); box-shadow: 0 0 20px rgba(0,212,255,0.2); transform: scale(1.02); }
+  .gallery-icon { font-size: 3rem; opacity: 0.4; }
+  .gallery-label {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    padding: 1rem 0.75rem 0.75rem;
+    background: linear-gradient(transparent, rgba(2,4,8,0.95));
+    font-family: var(--font-raj);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--neon-cyan);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .gallery-item:hover .gallery-label { opacity: 1; }
+
+  /* lightbox */
+  #lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(2,4,8,0.96);
+    z-index: 50000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(20px);
+  }
+  #lightbox.open { display: flex; }
+  .lightbox-inner {
+    background: var(--dark-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 600px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 0 60px rgba(0,212,255,0.2);
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    background: none;
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lightbox-close:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); }
+  .lightbox-emoji { font-size: 6rem; margin-bottom: 1rem; }
+  .lightbox-title { font-family: var(--font-raj); font-size: 1.2rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--neon-cyan); margin-bottom: 0.5rem; }
+  .lightbox-desc { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; }
+
+  /* ─── CONTACT ─── */
+  #contact { background: var(--dark-bg); }
+  .contact-wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+  .contact-info h3 {
+    font-family: var(--font-orb);
+    font-size: 1rem;
+    color: var(--neon-cyan);
+    letter-spacing: 0.15em;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+  }
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    padding: 1rem;
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    background: var(--dark-card);
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+  }
+  .contact-item:hover { border-color: var(--neon-cyan); box-shadow: 0 0 20px rgba(0,212,255,0.1); }
+  .contact-item-icon {
+    width: 40px; height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 8px;
+    color: var(--neon-cyan);
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .contact-item-text span {
+    font-family: var(--font-raj);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .contact-item-text a, .contact-item-text p {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .contact-item-text a:hover { color: var(--neon-cyan); }
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+  .form-group { position: relative; }
+  .form-group label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--neon-cyan);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  .form-group input, .form-group textarea {
+    width: 100%;
+    background: rgba(4,15,35,0.8);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    color: var(--text-primary);
+    font-family: var(--font-pop);
+    font-size: 0.9rem;
+    outline: none;
+    transition: all 0.3s;
+    resize: none;
+    backdrop-filter: blur(10px);
+  }
+  .form-group input:focus, .form-group textarea:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 15px rgba(0,212,255,0.1);
+    background: rgba(0,212,255,0.03);
+  }
+  .form-group textarea { min-height: 120px; }
+  .btn-send {
+    font-family: var(--font-raj);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 1rem 2rem;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    color: #fff;
+    border-radius: 8px;
+    transition: all 0.3s;
+    box-shadow: 0 0 20px rgba(0,100,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .btn-send:hover { box-shadow: 0 0 40px rgba(0,212,255,0.5); transform: translateY(-2px); }
+
+  /* ─── AI CHATBOT UI ─── */
+  #chatbot-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 5rem;
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 1.3rem;
+    cursor: pointer;
+    z-index: 8000;
+    box-shadow: 0 0 20px rgba(176,0,255,0.4);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #chatbot-btn:hover { transform: scale(1.1); box-shadow: 0 0 40px rgba(176,0,255,0.6); }
+  #chatbot-panel {
+    position: fixed;
+    bottom: 6rem;
+    right: 1rem;
+    width: 320px;
+    background: rgba(4,15,35,0.95);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    z-index: 8001;
+    display: none;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(0,212,255,0.1);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+    max-height: 420px;
+  }
+  #chatbot-panel.open { display: flex; animation: slideUp 0.3s ease; }
+  .chatbot-header {
+    padding: 1rem 1.25rem;
+    background: linear-gradient(135deg, rgba(0,100,255,0.15), rgba(176,0,255,0.1));
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .chatbot-avatar {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+  .chatbot-name {
+    font-family: var(--font-orb);
+    font-size: 0.75rem;
+    color: var(--neon-cyan);
+    letter-spacing: 0.1em;
+  }
+  .chatbot-status { font-size: 0.65rem; color: var(--neon-green); letter-spacing: 0.1em; }
+  .chatbot-messages { padding: 1rem; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; }
+  .chat-msg {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    padding: 0.6rem 0.9rem;
+    border-radius: 10px;
+    max-width: 85%;
+  }
+  .chat-msg.bot {
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    color: var(--text-secondary);
+    align-self: flex-start;
+    border-top-left-radius: 2px;
+  }
+  .chat-msg.user {
+    background: rgba(176,0,255,0.15);
+    border: 1px solid rgba(176,0,255,0.3);
+    color: var(--text-primary);
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+  }
+  .chatbot-input-wrap {
+    padding: 0.75rem;
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    gap: 0.5rem;
+  }
+  .chatbot-input {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    color: var(--text-primary);
+    font-size: 0.82rem;
+    font-family: var(--font-pop);
+    outline: none;
+  }
+  .chatbot-input:focus { border-color: var(--neon-cyan); }
+  .chatbot-send {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+  .chatbot-send:hover { transform: scale(1.05); }
+
+  /* ─── TERMINAL POPUP ─── */
+  #terminal-btn {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--neon-green);
+    border: 1px solid rgba(0,255,65,0.3);
+    background: rgba(0,255,65,0.05);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    z-index: 8000;
+    transition: all 0.3s;
+    letter-spacing: 0.1em;
+  }
+  #terminal-btn:hover { border-color: var(--neon-green); box-shadow: 0 0 20px rgba(0,255,65,0.3); }
+  #terminal-popup {
+    position: fixed;
+    bottom: 5rem;
+    left: 2rem;
+    width: 500px;
+    max-width: calc(100vw - 4rem);
+    z-index: 8001;
+    display: none;
+  }
+  #terminal-popup.open { display: block; animation: slideUp 0.3s ease; }
+
+  /* ─── SCROLL TO TOP ─── */
+  #scroll-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 42px; height: 42px;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: var(--neon-cyan);
+    font-size: 1rem;
+    cursor: pointer;
+    z-index: 7999;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    backdrop-filter: blur(10px);
+  }
+  #scroll-top.visible { opacity: 1; pointer-events: all; }
+  #scroll-top:hover { background: rgba(0,212,255,0.2); border-color: var(--neon-cyan); box-shadow: 0 0 20px rgba(0,212,255,0.3); transform: translateY(-4px); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    position: relative;
+    z-index: 2;
+    background: rgba(2, 4, 8, 0.9);
+    border-top: 1px solid var(--glass-border);
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: var(--font-orb);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px var(--neon-cyan);
+    letter-spacing: 0.2em;
+    margin-bottom: 0.5rem;
+  }
+  .footer-tagline {
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .footer-tagline span { color: var(--neon-cyan); }
+  .footer-links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .footer-links a {
+    font-family: var(--font-raj);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--neon-cyan); }
+  .footer-copy {
+    font-size: 0.78rem;
+    color: rgba(138,180,204,0.5);
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── MUSIC TOGGLE ─── */
+  #music-btn {
+    position: fixed;
+    top: 80px;
+    right: 1.5rem;
+    z-index: 8000;
+    background: rgba(2,4,8,0.7);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+  }
+  #music-btn:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); }
+  #music-btn.active { border-color: var(--neon-green); color: var(--neon-green); box-shadow: 0 0 15px rgba(0,255,65,0.3); }
+
+  /* ─── KEYFRAMES ─── */
+  @keyframes fadeInDown { from { opacity:0; transform: translateY(-20px); } to { opacity:1; transform: translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+  @keyframes fadeInRight { from { opacity:0; transform: translateX(40px); } to { opacity:1; transform: translateX(0); } }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+  @keyframes rotateSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes rotate3d { from { transform: rotateY(0deg) rotateX(10deg); } to { transform: rotateY(360deg) rotateX(10deg); } }
+  @keyframes pulse { 0%,100% { transform:scale(1); opacity:1; } 50% { transform:scale(1.5); opacity:0.7; } }
+  @keyframes slideUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+  @keyframes scanline {
+    0% { top: -5%; }
+    100% { top: 105%; }
+  }
+  @keyframes borderGlow {
+    0%,100% { box-shadow: 0 0 10px var(--neon-cyan); }
+    50% { box-shadow: 0 0 30px var(--neon-cyan), 0 0 60px var(--neon-blue); }
+  }
+  @keyframes glitch1 {
+    0%,100%{clip-path:inset(0 0 98% 0);transform:translate(-2px)} 20%{clip-path:inset(50% 0 30% 0);transform:translate(2px)} 40%{clip-path:inset(20% 0 60% 0);transform:translate(-1px)} 60%{clip-path:inset(70% 0 10% 0);transform:translate(3px)} 80%{clip-path:inset(40% 0 50% 0);transform:translate(-2px)}
+  }
+
+  /* ─── REVEAL ─── */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 900px) {
+    .hero-visual { display: none; }
+    .about-grid { grid-template-columns: 1fr; }
+    .contact-wrap { grid-template-columns: 1fr; }
+    .nav-links {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(2,4,8,0.97);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2.5rem;
+      z-index: 8999;
+      backdrop-filter: blur(20px);
+    }
+    .nav-links.open { display: flex; animation: fadeInDown 0.3s ease; }
+    .nav-links a { font-size: 1.2rem; }
+    .hamburger { display: flex; z-index: 9001; position: relative; }
+    .hero-content { max-width: 100%; }
+  }
+  @media (max-width: 540px) {
+    section { padding: 4rem 1.25rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .cybersec-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .about-stats { grid-template-columns: repeat(2, 1fr); }
+    #terminal-popup { width: calc(100vw - 4rem); left: 2rem; }
+    #chatbot-panel { right: 0; width: 100%; border-radius: 16px 16px 0 0; }
+  }
+
+  /* scanline effect on hero */
+  #hero::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(transparent, rgba(0,212,255,0.15), transparent);
+    z-index: 3;
+    animation: scanline 4s linear infinite;
+    pointer-events: none;
+  }
+
+  /* animated neon border for section */
+  .neon-box {
+    border: 1px solid transparent;
+    border-image: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple), var(--neon-cyan)) 1;
+    animation: borderGlow 3s ease infinite;
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">CYBER WORLD</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+  <div class="loader-pct" id="loader-pct">0%</div>
+  <div class="loader-text">// INITIALIZING SECURE CONNECTION...</div>
+</div>
+
+<!-- MATRIX -->
+<canvas id="matrix-canvas"></canvas>
+<!-- PARTICLES -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" id="lightbox-close"><i class="fas fa-times"></i></button>
+    <div class="lightbox-emoji" id="lb-emoji">🏆</div>
+    <div class="lightbox-title" id="lb-title">Gallery Item</div>
+    <div class="lightbox-desc" id="lb-desc">Description here</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">CYBER<span>WORLD</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about" onclick="closeNav()">About</a></li>
+    <li><a href="#skills" onclick="closeNav()">Skills</a></li>
+    <li><a href="#cybersec" onclick="closeNav()">Security</a></li>
+    <li><a href="#projects" onclick="closeNav()">Projects</a></li>
+    <li><a href="#gallery" onclick="closeNav()">Gallery</a></li>
+    <li><a href="#contact" onclick="closeNav()">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MUSIC -->
+<button id="music-btn" title="Toggle Sound" onclick="toggleMusic()"><i class="fas fa-volume-mute"></i></button>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span>// FOUNDER OF CYBER WORLD</span>
+    </div>
+    <h1 class="hero-name">HELLO, I'M<br>SHIVANSH KUMAR</h1>
+    <div class="hero-typed-wrap">
+      <span id="typed-text"></span><span class="typed-cursor"></span>
+    </div>
+    <p class="hero-desc">
+      Cyber Security Enthusiast & Web Developer crafting secure digital experiences.
+      Teaching the next generation to CODE, SECURE & GROW.
+    </p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-primary"><i class="fas fa-rocket"></i> Explore Portfolio</a>
+      <a href="#contact" class="btn-outline"><i class="fas fa-paper-plane"></i> Contact Me</a>
+    </div>
+    <div class="hero-socials">
+      <a href="https://www.instagram.com/shivansh_kuma_007?igsh=NjczenByOGRiNnZv" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://github.com/shivanshkumar007" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/shivansh-kumar-007" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="https://t.me/shivanshkumar007" class="social-icon" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
+      <a href="https://wa.me/917390084016" class="social-icon" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    </div>
+  </div>
+
+  <!-- Terminal Visual -->
+  <div class="hero-visual">
+    <div class="terminal-window">
+      <div class="terminal-bar">
+        <div class="t-dot red"></div>
+        <div class="t-dot yellow"></div>
+        <div class="t-dot green"></div>
+        <div class="terminal-title">root@cyberworld ~ /hack</div>
+      </div>
+      <div class="terminal-body" id="terminal-body"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-title reveal"><span>[ </span>ABOUT<span> ]</span></div>
+  <div class="section-line reveal"></div>
+  <div class="section-subtitle reveal">// WHO AM I</div>
+  <div class="about-grid">
+    <div class="about-avatar-wrap reveal">
+      <div class="avatar-ring"></div>
+      <div class="avatar-ring"></div>
+      <div class="about-avatar">
+        <span class="about-avatar-inner">🧑‍💻</span>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card reveal">
+          <span class="stat-number" data-target="2">0</span>
+          <span class="stat-label">Years Experience</span>
+        </div>
+        <div class="stat-card reveal">
+          <span class="stat-number" data-target="15">0</span>
+          <span class="stat-label">Projects Done</span>
+        </div>
+        <div class="stat-card reveal">
+          <span class="stat-number" data-target="500">0</span>
+          <span class="stat-label">Students Taught</span>
+        </div>
+        <div class="stat-card reveal">
+          <span class="stat-number" data-target="10">0</span>
+          <span class="stat-label">Workshops Held</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-text reveal">
+      <h3>// CYBER SECURITY ENTHUSIAST</h3>
+      <p>
+        Shivansh Kumar is a dedicated Cyber Security student and the founder of <strong style="color:var(--neon-cyan)">Cyber World</strong> — a platform committed to spreading digital literacy and cyber awareness.
+      </p>
+      <p>
+        Passionate about Ethical Hacking, Web Development, Networking, and Cyber Awareness. Dedicated to teaching students modern technology and digital safety in easy, accessible language.
+      </p>
+      <p>
+        Whether it's building secure web applications, running security workshops, or developing hacking tools for ethical use — Shivansh is at the forefront of cyber education.
+      </p>
+      <div class="about-tags">
+        <span class="tag">Ethical Hacking</span>
+        <span class="tag">Kali Linux</span>
+        <span class="tag">Web Dev</span>
+        <span class="tag">Networking</span>
+        <span class="tag">Python</span>
+        <span class="tag">Cyber Awareness</span>
+        <span class="tag">OSINT</span>
+        <span class="tag">Penetration Testing</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-title reveal"><span>[ </span>SKILLS<span> ]</span></div>
+  <div class="section-line reveal"></div>
+  <div class="section-subtitle reveal">// TECH ARSENAL</div>
+  <div class="skills-grid">
+    <!-- skills injected by JS -->
+  </div>
+</section>
+
+<!-- CYBER SECURITY -->
+<section id="cybersec">
+  <div class="section-title reveal"><span>[ </span>CYBER SECURITY<span> ]</span></div>
+  <div class="section-line reveal"></div>
+  <div class="section-subtitle reveal">// PROTECTION DOMAINS</div>
+  <div class="cybersec-grid">
+    <div class="cybersec-card reveal">
+      <div class="cybersec-icon">🔓</div>
+      <h3>Ethical Hacking</h3>
+      <p>Authorized penetration testing to identify vulnerabilities before malicious actors do. Certified ethical approach to system security assessment.</p>
+    </div>
+    <div class="cybersec-card reveal">
+      <div class="cybersec-icon">🛡️</div>
+      <h3>Cyber Awareness</h3>
+      <p>Educating individuals and organizations about online threats, safe browsing habits, and proactive security measures to stay protected.</p>
+    </div>
+    <div class="cybersec-card reveal">
+      <div class="cybersec-icon">🌐</div>
+      <h3>Network Security</h3>
+      <p>Securing network infrastructure against intrusions, monitoring traffic patterns, and implementing firewalls and IDS/IPS systems.</p>
+    </div>
+    <div class="cybersec-card reveal">
+      <div class="cybersec-icon">🎣</div>
+      <h3>Phishing Protection</h3>
+      <p>Training users to identify phishing attacks and deploying technical controls to prevent credential theft and social engineering.</p>
+    </div>
+    <div class="cybersec-card reveal">
+      <div class="cybersec-icon">🔑</div>
+      <h3>Password Security</h3>
+      <p>Implementing strong password policies, multi-factor authentication, and password managers to protect digital identities.</p>
+    </div>
+    <div class="cybersec-card reveal">
+      <div class="cybersec-icon">📱</div>
+      <h3>Social Media Safety</h3>
+      <p>Guidance on privacy settings, digital footprint management, and protecting personal information across social platforms.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-title reveal"><span>[ </span>PROJECTS<span> ]</span></div>
+  <div class="section-line reveal"></div>
+  <div class="section-subtitle reveal">// WHAT I BUILT</div>
+  <div class="projects-grid" id="projects-grid"></div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="section-title reveal"><span>[ </span>GALLERY<span> ]</span></div>
+  <div class="section-line reveal"></div>
+  <div class="section-subtitle reveal">// MOMENTS & WORK</div>
+  <div class="gallery-grid" id="gallery-grid"></div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-title reveal"><span>[ </span>CONTACT<span> ]</span></div>
+  <div class="section-line reveal"></div>
+  <div class="section-subtitle reveal">// GET IN TOUCH</div>
+  <div class="contact-wrap">
+    <div class="contact-info reveal">
+      <h3>// REACH ME AT</h3>
+      <div class="contact-item">
+        <div class="contact-item-icon"><i class="fas fa-phone"></i></div>
+        <div class="contact-item-text">
+          <span>Phone</span>
+          <a href="tel:7390084016">7390084016</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon"><i class="fab fa-instagram"></i></div>
+        <div class="contact-item-text">
+          <span>Instagram</span>
+          <a href="#">@shivansh_kuma_007</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon"><i class="fas fa-envelope"></i></div>
+        <div class="contact-item-text">
+          <span>Email</span>
+          <a href="mailto:shivansh@cyberworld.in">shivansh@cyberworld.in</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon"><i class="fas fa-map-marker-alt"></i></div>
+        <div class="contact-item-text">
+          <span>Location</span>
+          <p>India 🇮🇳</p>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form reveal">
+      <div class="form-group">
+        <label>// Name</label>
+        <input type="text" placeholder="Your Name" id="c-name">
+      </div>
+      <div class="form-group">
+        <label>// Email</label>
+        <input type="email" placeholder="your@email.com" id="c-email">
+      </div>
+      <div class="form-group">
+        <label>// Message</label>
+        <textarea placeholder="Write your message here..." id="c-msg"></textarea>
+      </div>
+      <button class="btn-send" onclick="sendMsg()"><i class="fas fa-paper-plane"></i> TRANSMIT MESSAGE</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">CYBER WORLD</div>
+  <div class="footer-tagline"><span>CODE</span> • <span>SECURE</span> • <span>GROW</span></div>
+  <div class="footer-links">
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <p class="footer-copy">© 2024 Shivansh Kumar · Cyber World · All Rights Reserved</p>
+</footer>
+
+<!-- TERMINAL POPUP -->
+<button id="terminal-btn" onclick="toggleTerminal()">$ HACK TERMINAL</button>
+<div id="terminal-popup">
+  <div class="terminal-window">
+    <div class="terminal-bar">
+      <div class="t-dot red"></div>
+      <div class="t-dot yellow"></div>
+      <div class="t-dot green"></div>
+      <div class="terminal-title">shivansh@cyberworld:~$</div>
+    </div>
+    <div style="padding:1rem;font-family:var(--font-mono);font-size:0.78rem;line-height:1.9;max-height:260px;overflow-y:auto;" id="popup-terminal-body"></div>
+    <div style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem;border-top:1px solid var(--glass-border);">
+      <span style="color:var(--neon-green);font-family:var(--font-mono);font-size:0.78rem;">$</span>
+      <input type="text" id="terminal-input" placeholder="type a command..." style="flex:1;background:none;border:none;color:var(--neon-green);font-family:var(--font-mono);font-size:0.78rem;outline:none;" onkeydown="handleTermCmd(event)">
+    </div>
+  </div>
+</div>
+
+<!-- CHATBOT -->
+<button id="chatbot-btn" onclick="toggleChatbot()" title="AI Assistant"><i class="fas fa-robot"></i></button>
+<div id="chatbot-panel">
+  <div class="chatbot-header">
+    <div class="chatbot-avatar">🤖</div>
+    <div>
+      <div class="chatbot-name">CyberBot AI</div>
+      <div class="chatbot-status">● ONLINE</div>
+    </div>
+  </div>
+  <div class="chatbot-messages" id="chat-msgs">
+    <div class="chat-msg bot">Hello! I'm CyberBot. Ask me anything about Shivansh or Cyber World! 🛡️</div>
+  </div>
+  <div class="chatbot-input-wrap">
+    <input class="chatbot-input" id="chat-input" placeholder="Type your message..." onkeydown="chatEnter(event)">
+    <button class="chatbot-send" onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
+  </div>
+</div>
+
+<!-- SCROLL TOP -->
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
+<script>
+// ── DATA ──
+const skills = [
+  { name:'HTML', icon:'🌐', pct:90 },
+  { name:'CSS', icon:'🎨', pct:85 },
+  { name:'JavaScript', icon:'⚡', pct:78 },
+  { name:'Python', icon:'🐍', pct:75 },
+  { name:'Cyber Security', icon:'🛡️', pct:88 },
+  { name:'Networking', icon:'🔗', pct:80 },
+  { name:'Ethical Hacking', icon:'💀', pct:82 },
+  { name:'Kali Linux', icon:'🐉', pct:85 },
+  { name:'Web Design', icon:'✨', pct:87 },
+];
+
+const projects = [
+  { num:'01', name:'Cyber World Workshop', desc:'Full workshop website for Cyber World events with registration and content management.', stack:['HTML','CSS','JS','Bootstrap'], emoji:'🌐', colors:['#00d4ff','#002a40'] },
+  { num:'02', name:'Personal Jarvis AI', desc:'Voice-activated Python AI assistant with system controls, web search, and smart automation.', stack:['Python','AI/ML','NLP','SpeechRecognition'], emoji:'🤖', colors:['#b000ff','#15003d'] },
+  { num:'03', name:'Network Scanner GUI', desc:'Graphical network scanner built with Python to detect devices, open ports, and vulnerabilities.', stack:['Python','Nmap','Tkinter','Socket'], emoji:'🔍', colors:['#00ff41','#002a0d'] },
+  { num:'04', name:'Cyber Awareness Platform', desc:'Interactive learning platform for cybersecurity basics, quizzes, and awareness campaigns.', stack:['HTML','CSS','JS','Firebase'], emoji:'🎓', colors:['#ff006e','#3d0019'] },
+  { num:'05', name:'Restaurant Design Portfolio', desc:'Premium graphic design portfolio showcasing restaurant branding, menus, and social media kits.', stack:['Canva','Photoshop','Illustrator'], emoji:'🍽️', colors:['#ffaa00','#3d2800'] },
+];
+
+const galleryItems = [
+  { emoji:'📋', title:'Workshop Poster', desc:'Cyber World Workshop promotional poster — 2024 series' },
+  { emoji:'🏆', title:'Certificate', desc:'Cyber Security certification achievement' },
+  { emoji:'💻', title:'Coding Screenshot', desc:'Live pentesting session on Kali Linux' },
+  { emoji:'🎤', title:'Event Photo', desc:'Cyber awareness seminar at college' },
+  { emoji:'🌐', title:'Cyber World Logo', desc:'Official Cyber World brand identity design' },
+  { emoji:'🔐', title:'CTF Challenge', desc:'Capture the Flag competition participant' },
+  { emoji:'📱', title:'Social Campaign', desc:'Digital safety awareness campaign for Instagram' },
+  { emoji:'🎯', title:'Hackathon', desc:'Hackathon participation and project showcase' },
+];
+
+const chatResponses = {
+  hi: "Hello! 👋 I'm CyberBot, Shivansh's AI assistant. How can I help you learn about Cyber World?",
+  hello: "Hey there! Ask me about Shivansh's skills, projects, or Cyber World!",
+  skills: "Shivansh is skilled in: Ethical Hacking 🔓, Python 🐍, Web Dev 🌐, Kali Linux 🐉, Network Security 🛡️, and much more!",
+  projects: "Shivansh has built 5 awesome projects: Cyber World Workshop site, Jarvis AI, Network Scanner, Awareness Platform & Restaurant Designs!",
+  contact: "You can reach Shivansh at 7390084016 📞 or Instagram @cyber_world.in! Slide into those DMs! 😄",
+  cyber: "Cyber World is Shivansh's platform for teaching Cyber Security and ethical hacking in simple, accessible language for all students!",
+  hack: "Ethical hacking is legal security testing to find vulnerabilities before bad guys do. Shivansh specializes in this! 🔓",
+  default: "Interesting! 🤔 I'm still learning. Try asking about Shivansh's skills, projects, or how to contact him!"
+};
+
+const terminalCmds = {
+  help: `<span class="t-output">Available commands: whoami, skills, projects, contact, hack, clear, matrix</span>`,
+  whoami: `<span class="t-output"><span class="t-highlight">Shivansh Kumar</span> | Cyber Security Student | Founder @ Cyber World<br><span class="t-output">Location: India 🇮🇳 | Status: <span class="t-success">ACTIVE</span></span></span>`,
+  skills: `<span class="t-output">Loading skill matrix...<br><span class="t-success">✓</span> Ethical Hacking [████████░░] 82%<br><span class="t-success">✓</span> Kali Linux    [████████░░] 85%<br><span class="t-success">✓</span> Python        [███████░░░] 75%<br><span class="t-success">✓</span> Web Dev       [█████████░] 88%</span>`,
+  projects: `<span class="t-output">Scanning repositories...<br><span class="t-highlight">[1]</span> Cyber World Workshop<br><span class="t-highlight">[2]</span> Jarvis AI Assistant<br><span class="t-highlight">[3]</span> Network Scanner GUI<br><span class="t-highlight">[4]</span> Cyber Awareness Platform<br><span class="t-highlight">[5]</span> Restaurant Design Portfolio</span>`,
+  contact: `<span class="t-output">Contact info:<br>📞 <span class="t-success">7390084016</span><br>📸 <span class="t-success">@cyber_world.in</span><br>📧 <span class="t-success">shivansh@cyberworld.in</span></span>`,
+  hack: `<span class="t-output">Initiating ethical scan... 🔓<br>TARGET: localhost<br>PORT SCAN: [<span class="t-success">DONE</span>]<br>VULNERABILITY: <span class="t-error">NONE FOUND</span> — System secure!<br>Remember: <span class="t-highlight">Always hack ethically! ⚖️</span></span>`,
+  matrix: `<span class="t-output"><span class="t-highlight">Wake up, Neo...</span><br>The matrix has you...<br><span class="t-success">Follow the white rabbit. 🐇</span></span>`,
+  clear: 'CLEAR',
+};
+
+// ── BUILD SKILLS ──
+const sg = document.querySelector('.skills-grid');
+skills.forEach(s => {
+  sg.innerHTML += `
+  <div class="skill-card reveal">
+    <span class="skill-icon">${s.icon}</span>
+    <div class="skill-name">${s.name}</div>
+    <div class="skill-bar-wrap"><div class="skill-bar" data-pct="${s.pct}"></div></div>
+    <span class="skill-pct">${s.pct}%</span>
+  </div>`;
+});
+
+// ── BUILD PROJECTS ──
+const pg = document.getElementById('projects-grid');
+projects.forEach(p => {
+  pg.innerHTML += `
+  <div class="project-card reveal">
+    <div class="project-preview" style="background:linear-gradient(135deg,${p.colors[1]},${p.colors[0]}22);">
+      <div class="project-preview-bg">${p.emoji}</div>
+      <div class="project-overlay">
+        <a href="#" class="proj-link demo">Live Demo</a>
+        <a href="#" class="proj-link github"><i class="fab fa-github"></i> Code</a>
+      </div>
+    </div>
+    <div class="project-body">
+      <div class="project-num">// PROJECT ${p.num}</div>
+      <div class="project-name">${p.name}</div>
+      <p class="project-desc">${p.desc}</p>
+      <div class="project-stack">${p.stack.map(t=>`<span class="stack-tag">${t}</span>`).join('')}</div>
+    </div>
+  </div>`;
+});
+
+// ── BUILD GALLERY ──
+const gg = document.getElementById('gallery-grid');
+galleryItems.forEach((g,i) => {
+  gg.innerHTML += `
+  <div class="gallery-item reveal" onclick="openLightbox(${i})">
+    <span class="gallery-icon">${g.emoji}</span>
+    <div class="gallery-label">${g.title}</div>
+  </div>`;
+});
+
+// ── LIGHTBOX ──
+function openLightbox(i) {
+  const g = galleryItems[i];
+  document.getElementById('lb-emoji').textContent = g.emoji;
+  document.getElementById('lb-title').textContent = g.title;
+  document.getElementById('lb-desc').textContent = g.desc;
+  document.getElementById('lightbox').classList.add('open');
+}
+document.getElementById('lightbox-close').onclick = () => document.getElementById('lightbox').classList.remove('open');
+document.getElementById('lightbox').onclick = function(e) { if(e.target===this) this.classList.remove('open'); };
+
+// ── TYPED ANIMATION ──
+const phrases = ['Cyber Security Expert','Ethical Hacker','Web Developer','Founder of Cyber World'];
+let pIdx=0, cIdx=0, deleting=false;
+function type() {
+  const el = document.getElementById('typed-text');
+  const phrase = phrases[pIdx];
+  if (!deleting) {
+    el.textContent = phrase.slice(0, ++cIdx);
+    if (cIdx === phrase.length) { deleting = true; setTimeout(type, 2000); return; }
+  } else {
+    el.textContent = phrase.slice(0, --cIdx);
+    if (cIdx === 0) { deleting=false; pIdx=(pIdx+1)%phrases.length; }
+  }
+  setTimeout(type, deleting ? 60 : 100);
+}
+setTimeout(type, 3200);
+
+// ── HERO TERMINAL ANIMATION ──
+const heroTermLines = [
+  { delay:0,    html:'<span class="t-line"><span class="t-prompt">root@cyberworld</span><span class="t-cmd"> ~$ </span><span class="t-highlight">nmap -sV 192.168.1.0/24</span></span>' },
+  { delay:600,  html:'<span class="t-line t-output">Starting Nmap 7.94...</span>' },
+  { delay:1100, html:'<span class="t-line t-success">✓ Host: 192.168.1.1 | Port: 80/tcp OPEN</span>' },
+  { delay:1600, html:'<span class="t-line t-success">✓ Host: 192.168.1.105 | Port: 22/tcp OPEN</span>' },
+  { delay:2100, html:'<span class="t-line t-error">⚠ Host: 192.168.1.200 | Vulnerability Found!</span>' },
+  { delay:2800, html:'<span class="t-line"><span class="t-prompt">root@cyberworld</span><span class="t-cmd"> ~$ </span><span class="t-highlight">python3 exploit.py --target 1.200</span></span>' },
+  { delay:3400, html:'<span class="t-line t-output">[*] Establishing connection...</span>' },
+  { delay:4000, html:'<span class="t-line t-success">[+] Shell obtained! Ethical test complete ✓</span>' },
+  { delay:4600, html:'<span class="t-line"><span class="t-prompt">root@cyberworld</span><span class="t-cmd"> ~$ </span><span class="terminal-cursor"></span></span>' },
+];
+const tb = document.getElementById('terminal-body');
+heroTermLines.forEach(l => setTimeout(() => { tb.innerHTML += l.html; }, l.delay + 3000));
+
+// ── MATRIX RAIN ──
+const mc = document.getElementById('matrix-canvas');
+const mctx = mc.getContext('2d');
+function resizeMatrix() { mc.width = innerWidth; mc.height = innerHeight; }
+resizeMatrix();
+window.addEventListener('resize', resizeMatrix);
+const cols = Math.floor(innerWidth / 16);
+const drops = Array(cols).fill(1);
+const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF!@#$%^&*';
+function drawMatrix() {
+  mctx.fillStyle='rgba(0,0,0,0.04)';
+  mctx.fillRect(0,0,mc.width,mc.height);
+  mctx.fillStyle='#00ff41';
+  mctx.font='14px Share Tech Mono';
+  drops.forEach((d,i) => {
+    const c = chars[Math.floor(Math.random()*chars.length)];
+    mctx.fillText(c, i*16, d*16);
+    if (d*16>mc.height && Math.random()>0.975) drops[i]=0;
+    drops[i]++;
+  });
+}
+setInterval(drawMatrix, 50);
+
+// ── PARTICLES ──
+const pc = document.getElementById('particles-canvas');
+const pctx = pc.getContext('2d');
+function resizePart() { pc.width = innerWidth; pc.height = innerHeight; }
+resizePart();
+window.addEventListener('resize', resizePart);
+const particles = Array.from({length: 60}, () => ({
+  x: Math.random()*innerWidth, y: Math.random()*innerHeight,
+  vx: (Math.random()-0.5)*0.4, vy: (Math.random()-0.5)*0.4,
+  r: Math.random()*2+0.5, a: Math.random()*0.5+0.1,
+  c: Math.random() > 0.5 ? '0,212,255' : '176,0,255'
+}));
+function drawParticles() {
+  pctx.clearRect(0,0,pc.width,pc.height);
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0||p.x > pc.width) p.vx *= -1;
+    if (p.y < 0||p.y > pc.height) p.vy *= -1;
+    pctx.beginPath();
+    pctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    pctx.fillStyle = `rgba(${p.c},${p.a})`;
+    pctx.fill();
+  });
+  // connections
+  particles.forEach((a,i) => {
+    particles.slice(i+1).forEach(b => {
+      const d = Math.hypot(a.x-b.x,a.y-b.y);
+      if (d < 120) {
+        pctx.beginPath();
+        pctx.strokeStyle = `rgba(0,212,255,${0.08*(1-d/120)})`;
+        pctx.lineWidth = 0.5;
+        pctx.moveTo(a.x,a.y);
+        pctx.lineTo(b.x,b.y);
+        pctx.stroke();
+      }
+    });
+  });
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ── CURSOR ──
+const dot = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+function moveCursor() {
+  dot.style.transform = `translate(${mx-4}px,${my-4}px)`;
+  rx += (mx-rx)*0.12; ry += (my-ry)*0.12;
+  ring.style.transform = `translate(${rx-18}px,${ry-18}px)`;
+  requestAnimationFrame(moveCursor);
+}
+moveCursor();
+document.querySelectorAll('a,button,.skill-card,.project-card,.gallery-item,.social-icon').forEach(el => {
+  el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+  el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+});
+
+// ── LOADER ──
+let pct = 0;
+const pctEl = document.getElementById('loader-pct');
+const interval = setInterval(() => {
+  pct = Math.min(pct + Math.random()*12, 100);
+  pctEl.textContent = Math.floor(pct) + '%';
+  if (pct >= 100) {
+    clearInterval(interval);
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hidden');
+    }, 400);
+  }
+}, 80);
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      // animate skill bars
+      const bar = e.target.querySelector('.skill-bar');
+      if (bar) bar.style.width = bar.dataset.pct + '%';
+      // animate counters
+      const num = e.target.querySelector('.stat-number[data-target]');
+      if (num) {
+        const target = +num.dataset.target;
+        let cur = 0;
+        const step = target / 60;
+        const t = setInterval(() => {
+          cur = Math.min(cur + step, target);
+          num.textContent = (Math.floor(cur) === target && target >= 100 ? target+'+'  : Math.floor(cur)+(target>=10&&target<100?'+':''));
+          if (cur >= target) clearInterval(t);
+        }, 30);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── NAVBAR ──
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', scrollY > 50);
+  document.getElementById('scroll-top').classList.toggle('visible', scrollY > 400);
+});
+function toggleNav() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+function closeNav() {
+  document.getElementById('navLinks').classList.remove('open');
+}
+
+// ── TERMINAL POPUP ──
+let termOpen = false;
+const popupTb = document.getElementById('popup-terminal-body');
+const ptLines = ['<span class="t-output">Cyber World Terminal v1.0</span>', '<span class="t-output t-success">Type "help" for commands</span>', ''];
+ptLines.forEach(l => { popupTb.innerHTML += `<div>${l}</div>`; });
+function toggleTerminal() {
+  termOpen = !termOpen;
+  document.getElementById('terminal-popup').classList.toggle('open', termOpen);
+  if (termOpen) document.getElementById('terminal-input').focus();
+}
+function handleTermCmd(e) {
+  if (e.key !== 'Enter') return;
+  const inp = document.getElementById('terminal-input');
+  const cmd = inp.value.trim().toLowerCase();
+  inp.value = '';
+  if (!cmd) return;
+  popupTb.innerHTML += `<div><span class="t-prompt">$</span> <span class="t-cmd">${cmd}</span></div>`;
+  const resp = terminalCmds[cmd];
+  if (resp === 'CLEAR') { popupTb.innerHTML = ''; }
+  else if (resp) { popupTb.innerHTML += `<div>${resp}</div>`; }
+  else { popupTb.innerHTML += `<div><span class="t-error">Command not found: ${cmd}. Type "help".</span></div>`; }
+  popupTb.scrollTop = popupTb.scrollHeight;
+}
+
+// ── CHATBOT ──
+let chatOpen = false;
+function toggleChatbot() {
+  chatOpen = !chatOpen;
+  document.getElementById('chatbot-panel').classList.toggle('open', chatOpen);
+}
+function sendChat() {
+  const inp = document.getElementById('chat-input');
+  const msg = inp.value.trim();
+  if (!msg) return;
+  inp.value = '';
+  const msgsEl = document.getElementById('chat-msgs');
+  msgsEl.innerHTML += `<div class="chat-msg user">${msg}</div>`;
+  const lower = msg.toLowerCase();
+  let resp = chatResponses.default;
+  for (const k of Object.keys(chatResponses)) {
+    if (lower.includes(k)) { resp = chatResponses[k]; break; }
+  }
+  setTimeout(() => {
+    msgsEl.innerHTML += `<div class="chat-msg bot">${resp}</div>`;
+    msgsEl.scrollTop = msgsEl.scrollHeight;
+  }, 600);
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+}
+function chatEnter(e) { if (e.key==='Enter') sendChat(); }
+
+// ── CONTACT ──
+function sendMsg() {
+  const n=document.getElementById('c-name').value;
+  const e=document.getElementById('c-email').value;
+  const m=document.getElementById('c-msg').value;
+  if (!n||!e||!m) { alert('Please fill all fields!'); return; }
+  alert(`✓ Message transmitted, ${n}! Shivansh will get back to you soon. 🛡️`);
+  document.getElementById('c-name').value='';
+  document.getElementById('c-email').value='';
+  document.getElementById('c-msg').value='';
+}
+
+// ── MUSIC TOGGLE ──
+let musicOn = false;
+const ctx = new (window.AudioContext || window.webkitAudioContext)();
+let oscillator = null;
+function toggleMusic() {
+  musicOn = !musicOn;
+  const btn = document.getElementById('music-btn');
+  if (musicOn) {
+    btn.innerHTML = '<i class="fas fa-volume-up"></i>';
+    btn.classList.add('active');
+    oscillator = ctx.createOscillator();
+    const gain = ctx.createGain();
+    oscillator.connect(gain);
+    gain.connect(ctx.destination);
+    oscillator.type = 'sine';
+    oscillator.frequency.value = 40;
+    gain.gain.value = 0.03;
+    oscillator.start();
+  } else {
+    btn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+    btn.classList.remove('active');
+    if (oscillator) { oscillator.stop(); oscillator = null; }
+  }
+}
+
+// ── MOUSE PARALLAX ──
+document.addEventListener('mousemove', e => {
+  const x = (e.clientX / innerWidth - 0.5) * 20;
+  const y = (e.clientY / innerHeight - 0.5) * 20;
+  const bg = document.querySelector('.hero-bg-grid');
+  if (bg) bg.style.transform = `translate(${x*0.3}px,${y*0.3}px)`;
+});
+</script>
+</body>
+</html>
